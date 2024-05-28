@@ -1,0 +1,20 @@
+groups:
+  - name: example
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes."
+
+      - alert: HighResponseTime
+        expr: http_request_duration_seconds_bucket{le="1"} / http_request_duration_seconds_count > 0.9
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time on {{ $labels.instance }}"
+          description: "Response time on {{ $labels.instance }} is higher than 1 second for more than 1 minute."
